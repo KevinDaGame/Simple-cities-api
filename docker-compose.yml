@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  api:
+    container_name: cities_api
+    build: ./city-api
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - MONGO_URL=mongodb://mongo:27017/cities
+
+  mongo:
+    image: mongo:5.0.15
+    volumes:
+      - mongo-db-volume:/data/db
+  mongo-seed:
+    container_name: mongo-seed
+    build: ./mongo-seed
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/cities
+
+volumes:
+    mongo-db-volume:
