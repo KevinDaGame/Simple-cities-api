@@ -39,6 +39,28 @@ app.get('/countries', async (req, res, next) => {
     }
 });
 
+app.get('/favorites', async (req, res, next) => {
+   const ids = req.query.ids
+    if(!ids){
+        return res.status(400).send('No ids provided')
+    }
+    const idsArray = (ids as string).split(',')
+    try {
+        const total = await City.countDocuments({_id: {$in: idsArray}});
+        const cities = await City.find({_id: {$in: idsArray}})
+            .exec();
+
+        res.send({
+            data: cities,
+            total,
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+
+});
+
 app.get('/cities', async (req, res, next) => {
     const page = req.query.page ? +req.query.page : 1;
     const size = req.query.size ? +req.query.size : 10;
