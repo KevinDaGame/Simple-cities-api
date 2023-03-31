@@ -22,6 +22,5 @@ services:
       - mongo
     environment:
       - MONGO_URL=mongodb://mongo:27017/cities
-    restart: unless-stopped
 volumes:
     mongo-db-volume:
